@@ -128,10 +128,14 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
     private JButton cancelButton = new JButton("Cancelar");
 
     private VuelosController vuelosController;
+    private LocacionesController locacionesController;
+    private TripulantesController tripulantesController;
     private List<Vuelos> vuelosMatched;
 
     public ConsultaActualizacionGUI(VuelosController vuelosController, AvionesController avionesController, TripulantesController tripulantesController, LocacionesController locacionesController) {
         this.vuelosController = vuelosController;
+        this.locacionesController = locacionesController;
+        this.tripulantesController = tripulantesController;
 
         ventana.setSize(WIDTH, HEIGHT);
         ventana.setLayout(layout);
@@ -235,9 +239,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         ventana.add(chkPermiteMascotas);
 
         lblPaisOrigen.setVisible(false);
-        for (String pais : locacionesController.getPaisesSet()) {
-            cbPaisOrigen.addItem(pais);
-        }
         cbPaisOrigen.setVisible(false);
         cbPaisOrigen.setSelectedItem(null);
         cbPaisOrigen.setEditable(false);
@@ -324,7 +325,11 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         searchButton.addActionListener(this);
 
-        //cbResultIds.addActionListener(this);
+        cbPaisOrigen.addActionListener(this);
+        cbPaisDestino.addActionListener(this);
+
+        cbCiudadOrigen.addActionListener(this);
+        cbCiudadDestino.addActionListener(this);
 
         showInfo.addActionListener(this);
 
@@ -349,6 +354,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         String criteria = cbCriteria.getSelectedItem() != null ? cbCriteria.getSelectedItem().toString() : null;
         String searchValue = searchField.getText();
         String selectedId = cbResultIds.getSelectedItem() != null ? (String) cbResultIds.getSelectedItem(): null;
+        Vuelos selectedVuelo = null;
 
         if (source == searchButton) {
             setComponentsInvisible();
@@ -370,18 +376,15 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         } else if (source == showInfo) {
             setComponentsNonEditable();
-            Vuelos selectedVuelo;
             int selectedIdInt = 0;
-            try {
-                if(selectedId != null) {
-                    selectedIdInt = Integer.parseInt(selectedId);
-                }
+            if(selectedId != null) {
+                selectedIdInt = Integer.parseInt(selectedId);
                 selectedVuelo = vuelosController.getVueloById(selectedIdInt);
-            } catch (Exception error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un vuelo", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
             txtIdVuelo.setText(String.valueOf(selectedVuelo.getIdVuelo()));
 
             txtTipoVuelo.setText(selectedVuelo.getTipoVuelo() == 'I' ? "Internacional" : "Nacional");
@@ -396,9 +399,18 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
             cbAvion.setSelectedItem(selectedVuelo.getAvion().getModelo());
 
-            for(Tripulantes t : selectedVuelo.getTripulacion()) {
-                lstTripulacion.setSelectedValue(String.valueOf(t.getDniTripulante()), true);
+            
+            int[] indices = new int[Vuelos.getTotalTripulantes()];
+            int cont = 0;
+            for(int i = 0 ; i < tripulantesController.getTripulacion().size() ; i++) {
+                for(Tripulantes t : selectedVuelo.getTripulacion()) {
+                    if(tripulantesController.getTripulacion().get(i).getDniTripulante() == t.getDniTripulante()) {
+                        indices[cont] = i;
+                        cont++;
+                    }
+                }
             }
+            lstTripulacion.setSelectedIndices(indices);
 
             chkTieneEscalas.setSelected(selectedVuelo.isTieneEscalas());
 
@@ -408,13 +420,24 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 Internacionales vueloInternacional = (Internacionales) selectedVuelo;
 
                 if (vueloInternacional.getPaisOrigen() != null) {
+                    cbPaisOrigen.removeAllItems();
+                    for (String pais : locacionesController.getPaisesSet()) {
+                        cbPaisOrigen.addItem(pais);
+                    }
                     cbPaisOrigen.setSelectedItem(vueloInternacional.getPaisOrigen().getNombrePais());
                     lblPaisOrigen.setVisible(true);
                     cbPaisOrigen.setVisible(true);
                 }
             
                 if (vueloInternacional.getPaisDestino() != null) {
-                    //CARGAR COMBO
+                    cbPaisDestino.removeAllItems();
+                    for (String p : this.locacionesController.getPaisesSet()) {
+                        if(cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) {
+                            continue;
+                        } else {
+                            cbPaisDestino.addItem(p);
+                        }
+                    }
                     cbPaisDestino.setSelectedItem(vueloInternacional.getPaisDestino().getNombrePais());
                     lblPaisDestino.setVisible(true);
                     cbPaisDestino.setVisible(true);
@@ -439,6 +462,14 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 }
             
                 if (vueloNacional.getCiudadDestino() != null) {
+                    cbCiudadDestino.removeAllItems();
+                    for (Locaciones l : this.locacionesController.getLocaciones()) {
+                        if(cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(l.getNombreCiudad())) {
+                            continue;
+                        } else if (l.getNombrePais().equals("Argentina")) {
+                            cbCiudadDestino.addItem(l.getNombreCiudad()); 
+                        }
+                    }
                     cbCiudadDestino.setSelectedItem(vueloNacional.getCiudadDestino().getNombreCiudad());
                     lblCiudadDestino.setVisible(true);
                     cbCiudadDestino.setVisible(true);
@@ -485,6 +516,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
             lblTripulacion.setVisible(true);
             lstTripulacion.setVisible(true);
+            spTripulacion.setVisible(true);
 
             lblTieneEscalas.setVisible(true);
             chkTieneEscalas.setVisible(true);
@@ -515,13 +547,54 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             acceptButton.setVisible(true);
             cancelButton.setVisible(true);
 
+
         } else if (source == deleteButton) {
+
+        } else if (source == cbCiudadOrigen) {
+            // model.removeAllElements();
+            // for (String c : locacionesController.getCiudadesSet()) {
+            //     if((cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(c)) || (cbCiudadDestino.getSelectedItem() != null && cbCiudadDestino.getSelectedItem().equals(c) )) {
+            //         continue;
+            //     } else {
+            //         model.addElement(c);
+            //     }
+            // }
+            cbCiudadDestino.removeAllItems();
+            for (Locaciones l : this.locacionesController.getLocaciones()) {
+                if(cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(l.getNombreCiudad())) {
+                    continue;
+                } else if (l.getNombrePais().equals("Argentina")) {
+                    cbCiudadDestino.addItem(l.getNombreCiudad()); 
+                }
+            }
+
+        } else if (source == cbCiudadDestino) {
+
+        } else if (source == cbPaisOrigen) {
+            // model.removeAllElements();
+            // for(String p : locacionesController.getPaisesSet()) {
+            //     if( (cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) || (cbPaisDestino.getSelectedItem() != null && cbPaisDestino.getSelectedItem().equals(p) )) {
+            //         continue;
+            //     } else {
+            //         model.addElement(p);
+            //     }
+            // }
+            cbPaisDestino.removeAllItems();
+            for (String p : this.locacionesController.getPaisesSet()) {
+                if(cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) {
+                    continue;
+                } else {
+                    cbPaisDestino.addItem(p);
+                }
+            }
+
+        } else if (source == cbPaisDestino) {
 
         } else if (source == acceptButton) {
 
         } else if (source == cancelButton) {
 
-        }
+        } 
         
     }
 
@@ -591,6 +664,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         lblTripulacion.setVisible(false);
         lstTripulacion.setVisible(false);
+        spTripulacion.setVisible(false);
 
         lblTieneEscalas.setVisible(false);
         chkTieneEscalas.setVisible(false);
@@ -682,7 +756,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbAvion.setEnabled(false);
         cbAvion.setEditable(false);
 
-        lstTripulacion.setEnabled(false);
+        //lstTripulacion.setEnabled(false);
         spTripulacion.setEnabled(false);
 
         chkTieneEscalas.setEnabled(false);
