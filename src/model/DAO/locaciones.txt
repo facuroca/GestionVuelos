@@ -1,0 +1,30 @@
+01Argentina        11Buenos Aires     
+01Argentina        12Rosario          
+01Argentina        13Cordoba          
+01Argentina        14Santa Fe         
+01Argentina        15Jujuy            
+01Argentina        16Rio Negro        
+02Espana           21Madrid           
+02Espana           22Barcelona        
+02Espana           23Malaga           
+03Brasil           31Sao Paulo        
+03Brasil           32Rio de Janeiro   
+03Brasil           33Fortaleza        
+04Inglaterra       41London           
+04Inglaterra       42Manchester       
+04Inglaterra       43Birmingham       
+05Estados Unidos   51Washington       
+05Estados Unidos   52Seattle          
+05Estados Unidos   53New York         
+06Peru             61Lima             
+06Peru             62Arequipa         
+06Peru             63Trujillo         
+07Chile            71Santiago de Chile
+07Chile            72Iquique          
+07Chile            73Antofagasta      
+08Mexico           81Ciudad de Mexico 
+08Mexico           82Cancun           
+08Mexico           83Acapulco         
+09Japon            91Tokio            
+09Japon            92Osaka            
+09Japon            93Kioto            
