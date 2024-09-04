@@ -21,8 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -61,22 +59,22 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
 
     private JLabel lblIdVuelo = new JLabel("ID Vuelo");
-    private JTextField txtIdVuelo = new JTextField();
+    private JTextField txtIdVuelo = new JTextField(9);
 
     private JLabel lblTipoVuelo = new JLabel("Tipo Vuelo");
-    private JTextField txtTipoVuelo = new JTextField();
+    private JTextField txtTipoVuelo = new JTextField(12);
 
     private JLabel lblAerolinea = new JLabel("Aerolinea");
-    private JTextField txtAerolinea = new JTextField();
+    private JTextField txtAerolinea = new JTextField(12);
 
     private JLabel lblFechaDeCarga = new JLabel("Fecha de Carga");
-    private JTextField txtFechaDeCarga = new JTextField();
+    private JTextField txtFechaDeCarga = new JTextField(11);
 
     private JLabel lblEstado = new JLabel("Estado");
     private JComboBox<String> cbEstado = new JComboBox<String>(new String[]{"Retrasado", "Cancelado", "Programado"});
 
     private JLabel lblDuracion = new JLabel("Duracion");
-    private JTextField txtDuracion = new JTextField();
+    private JTextField txtDuracion = new JTextField(5);
 
     private JLabel lblAvion = new JLabel("Avion");
     private JComboBox<String> cbAvion = new JComboBox<String>();
@@ -533,6 +531,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                         if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
+                            txtEscala1.setText(String.valueOf(esc.getEspera()));
                         }
                     }
                 } else if (selectedVuelo instanceof Internacionales && selectedVuelo.getEscalas().size() == 3) {
@@ -540,9 +539,13 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                         if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
+                            txtEscala1.setText(String.valueOf(esc.getEspera()));
                         } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getOrigen();
                             contEscalas++;
+                        } else if (!esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem()) && !esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())
+                        && !esc.getOrigen().equals((String)cbPaisDestino.getSelectedItem()) && !esc.getDestino().equals((String) cbPaisOrigen.getSelectedItem())) {
+                            txtEscala2.setText(String.valueOf(esc.getEspera()));
                         }
                     }
                 } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 2) {
@@ -550,6 +553,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                         if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
+                            txtEscala1.setText(String.valueOf(esc.getEspera()));
                         }
                     }
                 } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 3) {
@@ -557,9 +561,13 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                         if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
+                            txtEscala1.setText(String.valueOf(esc.getEspera()));
                         } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getOrigen();
                             contEscalas++;
+                        } else if (!esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem()) && !esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())
+                        && !esc.getOrigen().equals((String)cbCiudadDestino.getSelectedItem()) && !esc.getDestino().equals((String) cbCiudadOrigen.getSelectedItem())) {
+                            txtEscala2.setText(String.valueOf(esc.getEspera()));
                         }
                     }
                 }
@@ -811,6 +819,8 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         lstEscalas.setEnabled(true);
 
         panelEscalas.setEnabled(true);
+        txtEscala1.setEditable(true);
+        txtEscala2.setEditable(true);
 
         acceptButton.setVisible(true);
 
