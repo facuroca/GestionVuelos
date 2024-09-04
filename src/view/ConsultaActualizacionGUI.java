@@ -401,7 +401,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
             cbEstado.setSelectedItem(selectedVuelo.getEstado() == 'R' ? "Retrasado" : selectedVuelo.getEstado() == 'C' ? "Cancelado" : "Programado");
 
-            txtDuracion.setText(String.format("%.2f" ,selectedVuelo.getDuracion()));
+            txtDuracion.setText(String.valueOf(selectedVuelo.getDuracion()));
 
             cbAvion.setSelectedItem(selectedVuelo.getAvion().getModelo());
 
@@ -697,7 +697,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             String ciudadOrigen = cbCiudadOrigen.getSelectedItem() != null ? cbCiudadOrigen.getSelectedItem().toString() : null;
             String ciudadDestino = cbCiudadDestino.getSelectedItem() != null ? cbCiudadDestino.getSelectedItem().toString() : null;
             if(e.getActionCommand().equals("Validar_Datos_Numericos") || e.getActionCommand().equals("Validar_Datos_Completos")) {
-                System.out.println("entre en el if");
                 if(idVuelo.isEmpty() || tipoVuelo.isEmpty() || aerolinea.isEmpty() || estado == null || duracion.isEmpty() || modeloAvion == null || tripulantes.length == 0  || (tipoVuelo.equals("Internacional") && (chkRequiereVisa == null || zonaHorariaDestino == null || paisOrigen == null || paisDestino == null)) || (tipoVuelo.equals("Nacional") && (ciudadOrigen == null || ciudadDestino == null)) || (tieneEscalas && escalas.length == 0) || (tieneEscalas && escalas.length == 1 && escala1Duracion.isEmpty()) || (tieneEscalas && escalas.length == 2 && escala2Duracion.isEmpty()) ) {
                     JOptionPane.showMessageDialog(null, "Debe completar todos los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -939,6 +938,38 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
     }
 
     private void clearFields() {
+        setComponentsNonEditable();
+            
+        txtIdVuelo.setText("");
+        txtAerolinea.setText("");
+        cbEstado.setSelectedItem(null);
+        txtDuracion.setText("");
+        cbAvion.setSelectedItem(null);
+        chkTieneEscalas.setSelected(false);
+        chkPermiteMascotas.setSelected(true);
+        cbPaisOrigen.setSelectedItem(null);
+        cbPaisDestino.setSelectedItem(null);
+        chkRequiereVisa.setSelected(false);;
+        cbZonaHorariaDestino.setSelectedItem(null);
+        cbCiudadOrigen.setSelectedItem(null);
+        cbCiudadDestino.setSelectedItem(null);
+        lstEscalas.clearSelection();
+        lblPaisOrigen.setVisible(false);
+        cbPaisOrigen.setVisible(false);
+        lblPaisDestino.setVisible(false);
+        cbPaisDestino.setVisible(false);
+        lblZonaHorariaDestino.setVisible(false);
+        cbZonaHorariaDestino.setVisible(false);
+        lblCiudadOrigen.setVisible(false);
+        cbCiudadOrigen.setVisible(false);
+        lblCiudadDestino.setVisible(false);
+        cbCiudadDestino.setVisible(false);
+        lblEscalas.setVisible(false);
+        spEscalas.setVisible(false);
+        panelEscalas.setVisible(false);
+        txtEscala1.setText("");
+        txtEscala2.setText("");
+        lstTripulacion.clearSelection();
 
     }
 

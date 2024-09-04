@@ -84,6 +84,7 @@ public class VuelosController {
                     List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                     vuelos.getLast().setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
                     vuelos.getLast().setEscala(1, escalasStrings.get(0), lAuxDestino.getNombrePais(), 0);
+                    vuelos.getLast().setEscala(2, "null", "null", 0);
                 } else if (tieneEscalas && escalas.length == 2) {
                     List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                     vuelos.getLast().setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
@@ -128,6 +129,7 @@ public class VuelosController {
                     List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                     vuelos.getLast().setEscala(0, lAuxOrigen.getNombreCiudad(), escalasStrings.get(0), escala1Int);
                     vuelos.getLast().setEscala(1, escalasStrings.get(0), lAuxDestino.getNombreCiudad(), 0);
+                    vuelos.getLast().setEscala(2, "null", "null", 0);
                 } else if (tieneEscalas && escalas.length == 2) {
                     List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                     vuelos.getLast().setEscala(0, lAuxOrigen.getNombreCiudad(), escalasStrings.get(0), escala1Int);
@@ -400,6 +402,7 @@ public class VuelosController {
                                 List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                                 v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
                                 v.setEscala(1, escalasStrings.get(0), ciudadDestino, 0);
+                                v.setEscala(2, "null", "null", 0);
                             } else if (tieneEscalas && escalas.length == 2) {
                                 List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                                 v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
@@ -431,14 +434,12 @@ public class VuelosController {
                                 List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                                 v.setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
                                 v.setEscala(1, escalasStrings.get(0), lAuxDestino.getNombrePais(), 0);
+                                v.setEscala(2, "null", "null", 0);
                             } else if (tieneEscalas && escalas.length == 2) {
                                 List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
                                 v.setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
                                 v.setEscala(1, escalasStrings.get(0), escalasStrings.get(1), escala2Int);
-                                System.out.println("entre por el controller");
-                                System.out.println(v.getEscalas().size());
                                 v.setEscala(2, escalasStrings.get(1), lAuxDestino.getNombrePais(), 0);
-                                System.out.println("pase por el controller");
                             }
                         }
                     }

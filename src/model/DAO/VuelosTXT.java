@@ -102,11 +102,16 @@ public class VuelosTXT {
 
                 if(v.isTieneEscalas()) {
                     final List<String> escalas = Arrays.asList(parsed[10].trim().split(","));
-                    final List<Escalas> escalasVuelo = escalas.stream().map(e -> {
+                    int indexEscalas = 0;
+                    for (String e : escalas) { 
                         String[] escala = e.split("-");
-                        return new Escalas(escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
-                    }).collect(Collectors.toList());
-                    v.setEscalas(escalasVuelo);
+                        v.setEscala(indexEscalas, escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
+                        indexEscalas++;
+                    }
+                    // final List<Escalas> escalasVuelo = escalas.stream().map(e -> {
+                    //     String[] escala = e.split("-");
+                    //     return new Escalas(escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
+                    // }).collect(Collectors.toList());
                     if (v instanceof Internacionales) {
                         final String paisOrigen = parsed[11].trim();
                         final String paisDestino = parsed[12].trim();
@@ -183,7 +188,7 @@ public class VuelosTXT {
             out = new PrintWriter(fw);
             String tripulacion = last.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
             String escalas = last.getEscalas().stream()
-            .filter(e -> e.getOrigen() != null && e.getDestino() != null)
+            .filter(e -> e.getOrigen() != "null" && e.getDestino() != "null")
             .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
             .collect(Collectors.joining(","));
             out.println();
@@ -222,7 +227,7 @@ public class VuelosTXT {
                 Vuelos v = vuelos.get(i);
                 String tripulacion = v.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
                 String escalas = v.getEscalas().stream()
-                .filter(e -> e.getOrigen() != null && e.getDestino() != null)
+                .filter(e -> e.getOrigen() != "null" && e.getDestino() != "null")
                 .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
                 .collect(Collectors.joining(","));
 
