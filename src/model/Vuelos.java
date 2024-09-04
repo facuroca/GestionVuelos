@@ -115,7 +115,7 @@ public abstract class Vuelos {
         return escalas;
     }
 
-    public void setEscala(int index, String origen, String destino, double espera) {
+    public void setEscala(int index, String origen, String destino, int espera) {
         this.escalas.get(index).setOrigen(origen);
         this.escalas.get(index).setDestino(destino);
         this.escalas.get(index).setEspera(espera);

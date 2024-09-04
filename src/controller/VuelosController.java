@@ -362,4 +362,87 @@ public class VuelosController {
         }
         return vueloById;
     }
+
+    public void actualizarListadoVuelos(int idVueloInt, char tipoVuelo, String aerolinea, Calendar fechaSistema,
+            char estadoChar, double duracionDouble, String modeloAvion, Object[] tripulantes, boolean tieneEscalas,
+            boolean permiteMascotas, String paisOrigen, String paisDestino, boolean requiereVisa,
+            String zonaHorariaDestino, String ciudadOrigen, String ciudadDestino, Object[] escalas, int escala1Int,
+            int escala2Int) {
+                Aviones avionAux = null;
+                Locaciones lAuxOrigen = null;
+                Locaciones lAuxDestino = null;
+                for(Vuelos v : vuelos) {
+                    if(v.getIdVuelo() == idVueloInt) {
+                        v.setAerolinea(aerolinea);
+                        v.setEstado(estadoChar);
+                        v.setDuracion(duracionDouble);
+                        for (Aviones a : avionesController.getAviones()) {
+                            if (a.getModelo().equals(modeloAvion)) {
+                                avionAux = a;
+                                break;
+                            }
+                        }
+                        v.setAvion(avionAux);
+                        List<Tripulantes> tripulacion = new ArrayList<Tripulantes>();
+                        for(Object t : tripulantes) {
+                            Integer d = Integer.parseInt(t.toString());
+                            for (Tripulantes tripulante : tripulacionController.getTripulacion()) {
+                                if (tripulante.getDniTripulante() == d) {
+                                    tripulacion.add(tripulante);
+                                }
+                            }
+                        }
+                        v.setTripulacion(tripulacion);
+                        v.setTieneEscalas(tieneEscalas);
+                        v.setPermiteMascotas(permiteMascotas);
+                        if(v instanceof Nacionales) {
+                            if(tieneEscalas && escalas.length == 1) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), ciudadDestino, 0);
+                            } else if (tieneEscalas && escalas.length == 2) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), escalasStrings.get(1), escala2Int);
+                                v.setEscala(2, escalasStrings.get(1), ciudadDestino, 0);
+                            }
+                            for(Locaciones l : locacionesController.getLocaciones()) {
+                                if (l.getNombrePais().equals("Argentina") && l.getNombreCiudad().equals(ciudadOrigen)) {
+                                    lAuxOrigen = l;
+                                } else if (l.getNombrePais().equals("Argentina") && l.getNombreCiudad().equals(ciudadDestino)) {
+                                    lAuxDestino = l;
+                                }
+                            }
+                            ((Nacionales) v).setCiudadOrigen(lAuxOrigen);
+                            ((Nacionales) v).setCiudadDestino(lAuxDestino);                         
+                        } else if (v instanceof Internacionales) {
+                            for(Locaciones l : locacionesController.getLocaciones()) {
+                                if (l.getNombrePais().equals(paisOrigen)) {
+                                    lAuxOrigen = l;
+                                } else if (l.getNombrePais().equals(paisDestino)) {
+                                    lAuxDestino = l;
+                                }
+                            }
+                            ((Internacionales)v).setPaisOrigen(lAuxOrigen);
+                            ((Internacionales)v).setPaisDestino(lAuxDestino);
+                            ((Internacionales)v).setRequiereVisa(requiereVisa);
+                            ((Internacionales)v).setZonaHorariaDestino(zonaHorariaDestino);
+                            if(tieneEscalas && escalas.length == 1) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), lAuxDestino.getNombrePais(), 0);
+                            } else if (tieneEscalas && escalas.length == 2) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, lAuxOrigen.getNombrePais(), escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), escalasStrings.get(1), escala2Int);
+                                System.out.println("entre por el controller");
+                                System.out.println(v.getEscalas().size());
+                                v.setEscala(2, escalasStrings.get(1), lAuxDestino.getNombrePais(), 0);
+                                System.out.println("pase por el controller");
+                            }
+                        }
+                    }
+                }
+        VuelosTXT.escribirVuelosActualizados(vuelos);
+    }
 }

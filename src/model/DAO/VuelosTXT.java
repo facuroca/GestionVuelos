@@ -104,7 +104,7 @@ public class VuelosTXT {
                     final List<String> escalas = Arrays.asList(parsed[10].trim().split(","));
                     final List<Escalas> escalasVuelo = escalas.stream().map(e -> {
                         String[] escala = e.split("-");
-                        return new Escalas(escala[0], escala[1], ValidacionArchivos.esDouble(escala[2]));
+                        return new Escalas(escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
                     }).collect(Collectors.toList());
                     v.setEscalas(escalasVuelo);
                     if (v instanceof Internacionales) {
@@ -181,12 +181,12 @@ public class VuelosTXT {
         try {
             fw = new FileWriter(vuelosPath, true);
             out = new PrintWriter(fw);
-            out.println();
             String tripulacion = last.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
             String escalas = last.getEscalas().stream()
             .filter(e -> e.getOrigen() != null && e.getDestino() != null)
             .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
             .collect(Collectors.joining(","));
+            out.println();
 
             out.print(last.getIdVuelo() + ";" + last.getTipoVuelo() + ";" + last.getAerolinea() + ";" + ValidacionArchivos.calendarToString(last.getFechaSistema()) +
              ";" + last.getEstado() + ";" + last.getDuracion() + ";" + last.getAvion().getModelo() +
@@ -204,12 +204,55 @@ public class VuelosTXT {
             } else if (last instanceof Nacionales && !last.isTieneEscalas()) {
                 out.print(";" + ((Nacionales)last).getCiudadOrigen().getNombreCiudad() + ";" + ((Nacionales)last).getCiudadDestino().getNombreCiudad());
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             out.close();
         }
+    }
+
+    public static void escribirVuelosActualizados(List<Vuelos> vuelos) {
+        FileWriter fw = null;
+        PrintWriter out = null;
+
+        try {
+            fw = new FileWriter(vuelosPath);
+            out = new PrintWriter(fw);
+            for (int i = 0 ; i < vuelos.size() ; i++) {
+                Vuelos v = vuelos.get(i);
+                String tripulacion = v.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
+                String escalas = v.getEscalas().stream()
+                .filter(e -> e.getOrigen() != null && e.getDestino() != null)
+                .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
+                .collect(Collectors.joining(","));
+
+                out.print(v.getIdVuelo() + ";" + v.getTipoVuelo() + ";" + v.getAerolinea() + ";" + ValidacionArchivos.calendarToString(v.getFechaSistema()) +
+                 ";" + v.getEstado() + ";" + v.getDuracion() + ";" + v.getAvion().getModelo() +
+                  ";" + tripulacion + ";" + v.isTieneEscalas() + ";" + v.isPermiteMascotas());
+                if(v instanceof Internacionales && v.isTieneEscalas()) {
+                 out.print(";" + escalas + ";" + ((Internacionales)v).getPaisOrigen().getNombrePais() + ";" + 
+                 ((Internacionales)v).getPaisDestino().getNombrePais() + ";" + ((Internacionales)v).isRequiereVisa() + ";" 
+                 + ((Internacionales)v).getZonaHorariaDestino());
+                } else if(v instanceof Internacionales && !v.isTieneEscalas()) {
+                    out.print(";" + ((Internacionales)v).getPaisOrigen().getNombrePais() + ";" + ((Internacionales)v).getPaisDestino().getNombrePais() +
+                     ";" +((Internacionales)v).isRequiereVisa() + ";" + ((Internacionales)v).getZonaHorariaDestino());
+                } else if (v instanceof Nacionales && v.isTieneEscalas()) {
+                    out.print(";" + escalas + ";" + ((Nacionales)v).getCiudadOrigen().getNombreCiudad() + ";" +
+                     ((Nacionales)v).getCiudadDestino().getNombreCiudad());
+                } else if (v instanceof Nacionales && !v.isTieneEscalas()) {
+                    out.print(";" + ((Nacionales)v).getCiudadOrigen().getNombreCiudad() + ";" + ((Nacionales)v).getCiudadDestino().getNombreCiudad());
+                }
+                if(i != vuelos.size() - 1) {
+                out.println();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("entre por txt");
+            e.printStackTrace();
+        } finally {
+            out.close();
+        }
+
     }
 
 

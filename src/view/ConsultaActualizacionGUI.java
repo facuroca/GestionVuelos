@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.List;
+import java.util.Calendar;
 
 
 
@@ -322,6 +323,8 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cancelButton.setVisible(false);
 
 
+        acceptButton.setActionCommand("Validar_Datos_Completos");
+        acceptButton.setActionCommand("Validar_Datos_Numericos");
         
 
         searchButton.addActionListener(this);
@@ -593,6 +596,10 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
 
         } else if (source == editButton) {
+            if(txtIdVuelo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Seleccione un vuelo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             setComponentsEditable();
             editButton.setVisible(false);
             deleteButton.setVisible(false);
@@ -670,6 +677,64 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 panelEscalas.setVisible(false);
             }
         } else if (source == acceptButton) {
+            String idVuelo = txtIdVuelo.getText();
+            String tipoVuelo = txtTipoVuelo.getText();
+            String aerolinea = txtAerolinea.getText();
+            Calendar fechaSistema = ValidacionArchivos.parseCalendar(txtFechaDeCarga.getText());
+            String estado = cbEstado.getSelectedItem() != null ? cbEstado.getSelectedItem().toString() : null;
+            String duracion = txtDuracion.getText();
+            String modeloAvion = cbAvion.getSelectedItem() != null ? cbAvion.getSelectedItem().toString() : null;
+            Object[] tripulantes = lstTripulacion.getSelectedValuesList().toArray();
+            boolean tieneEscalas = chkTieneEscalas.isSelected();
+            boolean permiteMascotas = chkPermiteMascotas.isSelected();
+            Object[] escalas = lstEscalas.getSelectedValuesList().toArray();
+            String escala1Duracion = txtEscala1.getText();
+            String escala2Duracion = txtEscala2.getText();
+            String paisOrigen = cbPaisOrigen.getSelectedItem() != null ? cbPaisOrigen.getSelectedItem().toString() : null;
+            String paisDestino = cbPaisDestino.getSelectedItem() != null ? cbPaisDestino.getSelectedItem().toString() : null;
+            boolean requiereVisa = chkRequiereVisa.isSelected();
+            String zonaHorariaDestino = cbZonaHorariaDestino.getSelectedItem() != null ? cbZonaHorariaDestino.getSelectedItem().toString() : null;
+            String ciudadOrigen = cbCiudadOrigen.getSelectedItem() != null ? cbCiudadOrigen.getSelectedItem().toString() : null;
+            String ciudadDestino = cbCiudadDestino.getSelectedItem() != null ? cbCiudadDestino.getSelectedItem().toString() : null;
+            if(e.getActionCommand().equals("Validar_Datos_Numericos") || e.getActionCommand().equals("Validar_Datos_Completos")) {
+                System.out.println("entre en el if");
+                if(idVuelo.isEmpty() || tipoVuelo.isEmpty() || aerolinea.isEmpty() || estado == null || duracion.isEmpty() || modeloAvion == null || tripulantes.length == 0  || (tipoVuelo.equals("Internacional") && (chkRequiereVisa == null || zonaHorariaDestino == null || paisOrigen == null || paisDestino == null)) || (tipoVuelo.equals("Nacional") && (ciudadOrigen == null || ciudadDestino == null)) || (tieneEscalas && escalas.length == 0) || (tieneEscalas && escalas.length == 1 && escala1Duracion.isEmpty()) || (tieneEscalas && escalas.length == 2 && escala2Duracion.isEmpty()) ) {
+                    JOptionPane.showMessageDialog(null, "Debe completar todos los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else if(!txtDuracion.getText().matches("^[0-9]{1,15}.?[0-9]*$")) {
+                    JOptionPane.showMessageDialog(null, "La duración del vuelo debe ser un número entero positivo", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtDuracion.setText("");
+                    return;
+                } else if (txtEscala1.getText().length() > 0 && !txtEscala1.getText().matches("^[0-9]{1,3}$")) {
+                    JOptionPane.showMessageDialog(null, "El tiempo de espera en la escala 1 debe ser un número entero positivo maximo 3 digitos", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtEscala1.setText("");
+                    return;
+                } else if (txtEscala2.getText().length() > 0 && !txtEscala2.getText().matches("^[0-9]{1,3}$")) {
+                    JOptionPane.showMessageDialog(null, "El tiempo de espera en la escala 2 debe ser un número entero positivo maximo 3 digitos", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtEscala2.setText("");
+                    return;
+                } else if (tripulantes.length != 5) {
+                    JOptionPane.showMessageDialog(null, "El vuelo debe tener 5 tripulantes", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else {
+                int ingresoConfirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea actualizar el vuelo "+ idVuelo +" con estos datos?", "Confirmar ingreso de datos", JOptionPane.YES_NO_OPTION);
+                if(ingresoConfirm == JOptionPane.YES_OPTION) {
+                    try {
+                        final int idVueloInt = Integer.parseInt(idVuelo);
+                        final double duracionDouble = Double.parseDouble(duracion);
+                        final char estadoChar = estado.charAt(0);
+                        final int escala1Int = !escala1Duracion.isEmpty() ? Integer.parseInt(escala1Duracion) : 0;
+                        final int escala2Int = !escala2Duracion.isEmpty() ? Integer.parseInt(escala2Duracion) : 0;
+                        vuelosController.actualizarListadoVuelos(idVueloInt, tipoVuelo.charAt(0), aerolinea, fechaSistema, estadoChar, duracionDouble, modeloAvion, tripulantes, tieneEscalas, permiteMascotas, paisOrigen, paisDestino, requiereVisa, zonaHorariaDestino, ciudadOrigen, ciudadDestino, escalas, escala1Int, escala2Int);
+                        JOptionPane.showMessageDialog(null, "Datos actualizados correctamente", "Ingreso de datos", JOptionPane.INFORMATION_MESSAGE);
+                        clearFields();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    }
+                }
+            }
 
         } else if (source == cancelButton) {
 
@@ -871,6 +936,10 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         acceptButton.setVisible(false);
 
         cancelButton.setVisible(false);
+    }
+
+    private void clearFields() {
+
     }
 
 }

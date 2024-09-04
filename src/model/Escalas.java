@@ -5,12 +5,12 @@ public class Escalas {
 
     private String origen;
     private String destino;
-    private double espera;
+    private int espera;
 
     public Escalas() {
     }
 
-    public Escalas(String origen, String destino, double espera) {
+    public Escalas(String origen, String destino, int espera) {
         this.origen = origen;
         this.destino = destino;
         this.espera = espera;
@@ -32,11 +32,11 @@ public class Escalas {
         this.destino = destino;
     }
 
-    public double getEspera() {
+    public int getEspera() {
         return espera;
     }
 
-    public void setEspera(double espera) {
+    public void setEspera(int espera) {
         this.espera = espera;
     }
 
