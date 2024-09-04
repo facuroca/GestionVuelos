@@ -8,6 +8,7 @@ import controller.AvionesController;
 import controller.LocacionesController;
 import controller.TripulantesController;
 import model.Aviones;
+import model.Escalas;
 import model.Internacionales;
 import model.Locaciones;
 import model.Nacionales;
@@ -20,6 +21,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -335,6 +338,8 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         lstTripulacion.addListSelectionListener(this);
 
+        chkTieneEscalas.addActionListener(this);
+
         lstEscalas.addListSelectionListener(this);
 
 
@@ -477,22 +482,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             }
             
 
-
-            // model.clear();
-            // for (String escala : selectedVuelo.getEscalas()) {
-            //     model.addElement(escala);
-            // }
-
-            // panelEscalas.removeAll();
-
-            // panelEscalas.add(lblEscala1);
-            // panelEscalas.add(txtEscala1);
-            // panelEscalas.add(lblEscala2);
-            // panelEscalas.add(txtEscala2);
-            // panelEscalas.setVisible(true);
-            // panelEscalas.revalidate();
-            // panelEscalas.repaint();
-
             lblIdVuelo.setVisible(true);
             txtIdVuelo.setVisible(true);
 
@@ -524,12 +513,67 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             lblPermiteMascotas.setVisible(true);
             chkPermiteMascotas.setVisible(true);
 
-            lblEscalas.setVisible(true);
-            lstEscalas.setVisible(true);
-
-
-            panelEscalas.setVisible(true);
-
+            if(chkTieneEscalas.isSelected()) {
+                lblEscalas.setVisible(true);
+                lstEscalas.setVisible(true);
+                spEscalas.setVisible(true);
+                panelEscalas.removeAll();
+                panelEscalas.add(lblEscala1);
+                panelEscalas.add(txtEscala1);
+                panelEscalas.add(lblEscala2);
+                panelEscalas.add(txtEscala2);
+                panelEscalas.setVisible(true);
+                panelEscalas.revalidate();
+                panelEscalas.repaint();
+                int[] indicesEscalas = new int[selectedVuelo.getEscalas().size()-1];
+                int contEscalas = 0;
+                String[] escalasNames = new String[selectedVuelo.getEscalas().size()-1];
+                if (selectedVuelo instanceof Internacionales && selectedVuelo.getEscalas().size() == 2) {
+                    for(Escalas esc : selectedVuelo.getEscalas()) {
+                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getDestino();
+                            contEscalas++;
+                        }
+                    }
+                } else if (selectedVuelo instanceof Internacionales && selectedVuelo.getEscalas().size() == 3) {
+                    for(Escalas esc : selectedVuelo.getEscalas()) {
+                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getDestino();
+                            contEscalas++;
+                        } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getOrigen();
+                            contEscalas++;
+                        }
+                    }
+                } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 2) {
+                    for(Escalas esc : selectedVuelo.getEscalas()) {
+                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getDestino();
+                            contEscalas++;
+                        }
+                    }
+                } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 3) {
+                    for(Escalas esc : selectedVuelo.getEscalas()) {
+                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getDestino();
+                            contEscalas++;
+                        } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())) {
+                            escalasNames[contEscalas] = esc.getOrigen();
+                            contEscalas++;
+                        }
+                    }
+                }
+                for(int i = 0 ; i < escalasNames.length ; i++) {
+                    indicesEscalas[i] = model.indexOf(escalasNames[i]);
+                }
+                lstEscalas.setSelectedIndices(indicesEscalas);
+            } else {
+                lblEscalas.setVisible(false);
+                lstEscalas.setVisible(false);
+                spEscalas.setVisible(false);
+                panelEscalas.setVisible(false);
+            }
+            
             editButton.setVisible(true);
 
             deleteButton.setVisible(true);
@@ -551,14 +595,14 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         } else if (source == deleteButton) {
 
         } else if (source == cbCiudadOrigen) {
-            // model.removeAllElements();
-            // for (String c : locacionesController.getCiudadesSet()) {
-            //     if((cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(c)) || (cbCiudadDestino.getSelectedItem() != null && cbCiudadDestino.getSelectedItem().equals(c) )) {
-            //         continue;
-            //     } else {
-            //         model.addElement(c);
-            //     }
-            // }
+            model.removeAllElements();
+            for (String c : locacionesController.getCiudadesSet()) {
+                if((cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(c)) || (cbCiudadDestino.getSelectedItem() != null && cbCiudadDestino.getSelectedItem().equals(c) )) {
+                    continue;
+                } else {
+                    model.addElement(c);
+                }
+            }
             cbCiudadDestino.removeAllItems();
             for (Locaciones l : this.locacionesController.getLocaciones()) {
                 if(cbCiudadOrigen.getSelectedItem() != null && cbCiudadOrigen.getSelectedItem().equals(l.getNombreCiudad())) {
@@ -569,16 +613,24 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             }
 
         } else if (source == cbCiudadDestino) {
-
+            model.removeAllElements();
+            for (Locaciones l : this.locacionesController.getLocaciones()) {
+                if(cbCiudadOrigen.getSelectedItem() != null && cbCiudadDestino.getSelectedItem() != null && ( cbCiudadDestino.getSelectedItem().equals(l.getNombreCiudad()) || cbCiudadOrigen.getSelectedItem().equals(l.getNombreCiudad())) ) {
+                    model.removeElement(l.getNombreCiudad());
+                    continue;
+                } else if (l.getNombrePais().equals("Argentina")) {
+                    model.addElement(l.getNombreCiudad());
+                }
+            }
         } else if (source == cbPaisOrigen) {
-            // model.removeAllElements();
-            // for(String p : locacionesController.getPaisesSet()) {
-            //     if( (cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) || (cbPaisDestino.getSelectedItem() != null && cbPaisDestino.getSelectedItem().equals(p) )) {
-            //         continue;
-            //     } else {
-            //         model.addElement(p);
-            //     }
-            // }
+            model.removeAllElements();
+            for(String p : locacionesController.getPaisesSet()) {
+                if( (cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) || (cbPaisDestino.getSelectedItem() != null && cbPaisDestino.getSelectedItem().equals(p) )) {
+                    continue;
+                } else {
+                    model.addElement(p);
+                }
+            }
             cbPaisDestino.removeAllItems();
             for (String p : this.locacionesController.getPaisesSet()) {
                 if(cbPaisOrigen.getSelectedItem() != null && cbPaisOrigen.getSelectedItem().equals(p) ) {
@@ -589,7 +641,26 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             }
 
         } else if (source == cbPaisDestino) {
+            model.removeAllElements();
+            for (String p : this.locacionesController.getPaisesSet()) {
+                if(cbPaisOrigen.getSelectedItem() != null && cbPaisDestino.getSelectedItem() != null && (cbPaisDestino.getSelectedItem().equals(p) || cbPaisOrigen.getSelectedItem().equals(p))) {
+                    model.removeElement(p);
+                    continue;
+                } else {
+                    model.addElement(p);
+                }
+            }
 
+        } else if (source == chkTieneEscalas) {
+            if(chkTieneEscalas.isSelected()) {
+                lblEscalas.setVisible(true);
+                spEscalas.setVisible(true);
+                panelEscalas.setVisible(true);
+            } else {
+                lblEscalas.setVisible(false);
+                spEscalas.setVisible(false);
+                panelEscalas.setVisible(false);
+            }
         } else if (source == acceptButton) {
 
         } else if (source == cancelButton) {
@@ -692,6 +763,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         lblEscalas.setVisible(false);
         lstEscalas.setVisible(false);
+        spEscalas.setVisible(false);
 
         panelEscalas.setVisible(false);
 
@@ -756,7 +828,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbAvion.setEnabled(false);
         cbAvion.setEditable(false);
 
-        //lstTripulacion.setEnabled(false);
+        lstTripulacion.setEnabled(false);
         spTripulacion.setEnabled(false);
 
         chkTieneEscalas.setEnabled(false);
@@ -782,6 +854,8 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
         lstEscalas.setEnabled(false);
 
+        txtEscala1.setEditable(false);
+        txtEscala2.setEditable(false);
         panelEscalas.setEnabled(false);
 
         acceptButton.setVisible(false);
