@@ -527,13 +527,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 panelEscalas.setVisible(true);
                 panelEscalas.revalidate();
                 panelEscalas.repaint();
-                //TODO FIX THIS
-                
-                // int[] indicesEscalas = new int[selectedVuelo.getEscalas().size()-1];
-                // int contEscalas = 0;
-                // String[] escalasNames = new String[selectedVuelo.getEscalas().size()-1];
                 int numEscalas = selectedVuelo.getEscalas().size();
-                System.out.println(numEscalas);
                 int[] indicesEscalas = new int[numEscalas];
                 int contEscalas = 0;
                 String[] escalasNames = new String[numEscalas];
@@ -622,6 +616,25 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
 
         } else if (source == deleteButton) {
+            if(txtIdVuelo.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Seleccione un vuelo para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int selectedIdInt = Integer.parseInt(selectedId);
+            int dialogResult = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el vuelo con ID " + selectedIdInt + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION) {
+                vuelosController.deleteVuelo(selectedIdInt);
+                JOptionPane.showMessageDialog(null, "Vuelo eliminado", "Info", JOptionPane.INFORMATION_MESSAGE);
+                setComponentsNonEditable();
+                setComponentsInvisible();
+                editButton.setVisible(true);
+                deleteButton.setVisible(true);
+                acceptButton.setVisible(false);
+                cancelButton.setVisible(false);
+                cbCriteria.setSelectedItem(null);
+                searchField.setText("");
+                cbResultIds.removeAllItems();
+            }
 
         } else if (source == cbCiudadOrigen) {
             model.removeAllElements();
@@ -683,10 +696,12 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         } else if (source == chkTieneEscalas) {
             if(chkTieneEscalas.isSelected()) {
                 lblEscalas.setVisible(true);
+                lstEscalas.setVisible(true);
                 spEscalas.setVisible(true);
                 panelEscalas.setVisible(true);
             } else {
                 lblEscalas.setVisible(false);
+                lstEscalas.setVisible(false);
                 spEscalas.setVisible(false);
                 panelEscalas.setVisible(false);
             }
@@ -741,6 +756,12 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                         vuelosController.actualizarListadoVuelos(idVueloInt, tipoVuelo.charAt(0), aerolinea, fechaSistema, estadoChar, duracionDouble, modeloAvion, tripulantes, tieneEscalas, permiteMascotas, paisOrigen, paisDestino, requiereVisa, zonaHorariaDestino, ciudadOrigen, ciudadDestino, escalas, escala1Int, escala2Int);
                         JOptionPane.showMessageDialog(null, "Datos actualizados correctamente", "Ingreso de datos", JOptionPane.INFORMATION_MESSAGE);
                         clearFields();
+                        setComponentsInvisible();
+                        editButton.setVisible(true);
+                        cbResultIds.removeAllItems();
+                        cbResultIds.setSelectedItem(null);
+                        cbCriteria.setSelectedItem(null);
+                        searchField.setText("");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         return;

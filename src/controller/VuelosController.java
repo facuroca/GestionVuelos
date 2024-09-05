@@ -446,4 +446,14 @@ public class VuelosController {
                 }
         VuelosTXT.escribirVuelosActualizados(vuelos);
     }
+
+    public void deleteVuelo(int selectedIdInt) {
+        for (Vuelos v : vuelos) {
+            if (v.getIdVuelo() == selectedIdInt) {
+                vuelos.remove(v);
+                break;
+            }
+        }
+        VuelosTXT.escribirVuelosActualizados(vuelos);
+    }
 }

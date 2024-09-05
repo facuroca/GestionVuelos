@@ -14,7 +14,6 @@
 83;I;Construcción Loca;2/09/2024;P;23.0;Boeing 737;28765432,27890123,29876543,32345678,33123456;false;true;Espana;Estados Unidos;false;GMT+7
 546;I;Paweł Łukasz;2/09/2024;P;8.0;Airbus A320;28765432,29876543,32345678,33123456,26789012;false;true;Espana;Estados Unidos;false;GMT+9
 555;I;Escalimetro;2/09/2024;P;1.2;Airbus A320;30456789,31234567,28765432,27890123,29876543;true;false;Inglaterra-Mexico-3,Mexico-Brasil-0;Inglaterra;Brasil;true;GMT+9
-4352;I;Locomot;4/09/2024;P;12.0;Airbus A340;28765432,29876543,32345678,33123456,26789012;false;true;Argentina;Chile;false;GMT+7
 22111;I;Latam;4/09/2024;P;2.0;Airbus A340;31234567,28765432,29876543,26789012,34567890;false;true;Argentina;Peru;false;GMT+7
 2423523;N;FlyBondi;4/09/2024;P;4.0;Boeing 737;28765432,27890123,29876543,32345678,33123456;false;true;Cordoba;Rio Negro
 321;I;Latam;4/09/2024;P;22.0;Boeing 737;28765432,29876543,33123456,25678901,34567890;false;true;Espana;Mexico;false;GMT+12
@@ -22,3 +21,4 @@
 543256;I;Emirates;4/09/2024;P;22.0;Airbus A320;30456789,31234567,28765432,27890123,29876543;true;true;Inglaterra-Espana-2,Espana-Japon-3,Japon-Estados Unidos-0;Inglaterra;Estados Unidos;false;GMT+12
 4364623;I;Latam;4/09/2024;P;32.0;Airbus A320;30456789,31234567,28765432,27890123,29876543;true;true;Mexico-Inglaterra-4,Inglaterra-Chile-0;Mexico;Chile;true;GMT+12
 653;I;Aerolineas Argentinas;4/09/2024;P;23.0;Airbus A340;31234567,29876543,38901234,44567890,56789012;true;true;Mexico-Peru-2,Peru-Argentina-0;Mexico;Argentina;false;GMT-3
+2313;N;Latam;5/09/2024;R;6.0;Boeing 737;28765432,27890123,32345678,26789012,25678901;true;true;Buenos Aires-Rosario-2,Rosario-Santa Fe-1,Santa Fe-Cordoba-0;Buenos Aires;Cordoba
