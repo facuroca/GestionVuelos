@@ -17,7 +17,6 @@ import model.Aviones;
 import model.Internacionales;
 import model.Nacionales;
 import model.Tripulantes;
-import model.Escalas;
 import model.Locaciones;
 import controller.LocacionesController;
 

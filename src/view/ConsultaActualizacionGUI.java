@@ -336,6 +336,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbCiudadDestino.addActionListener(this);
 
         showInfo.addActionListener(this);
+        cbResultIds.addActionListener(this);
 
         lstTripulacion.addListSelectionListener(this);
 
@@ -359,7 +360,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         Object source = e.getSource();
         String criteria = cbCriteria.getSelectedItem() != null ? cbCriteria.getSelectedItem().toString() : null;
         String searchValue = searchField.getText();
-        String selectedId = cbResultIds.getSelectedItem() != null ? (String) cbResultIds.getSelectedItem(): null;
+        String selectedId = cbResultIds.getSelectedItem() != null ? (String) cbResultIds.getSelectedItem(): "0";
         Vuelos selectedVuelo = null;
 
         if (source == searchButton) {
@@ -380,7 +381,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 return;
             }
 
-        } else if (source == showInfo) {
+        } else if (source == cbResultIds) {
             setComponentsNonEditable();
             int selectedIdInt = 0;
             if(selectedId != null) {
@@ -526,6 +527,8 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 panelEscalas.setVisible(true);
                 panelEscalas.revalidate();
                 panelEscalas.repaint();
+                //TODO FIX THIS
+                
                 int[] indicesEscalas = new int[selectedVuelo.getEscalas().size()-1];
                 int contEscalas = 0;
                 String[] escalasNames = new String[selectedVuelo.getEscalas().size()-1];
@@ -596,7 +599,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
 
         } else if (source == editButton) {
-            if(txtIdVuelo.getText().isEmpty()) {
+            if(txtIdVuelo.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Seleccione un vuelo", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -736,7 +739,12 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
             }
 
         } else if (source == cancelButton) {
-
+            int cancelOption = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cancelar el ingreso de datos?", "Cancelar ingreso de datos", JOptionPane.YES_NO_OPTION);
+            if(cancelOption == JOptionPane.YES_OPTION) {
+                clearFields();
+                setComponentsInvisible();
+                editButton.setVisible(true);
+            }
         } 
         
     }
@@ -941,6 +949,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         setComponentsNonEditable();
             
         txtIdVuelo.setText("");
+        txtTipoVuelo.setText("");
         txtAerolinea.setText("");
         cbEstado.setSelectedItem(null);
         txtDuracion.setText("");
