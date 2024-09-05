@@ -101,5 +101,25 @@ public class ValidacionArchivos {
             return d.get(Calendar.DAY_OF_MONTH) + "/" + (d.get(Calendar.MONTH)+1) + "/" + d.get(Calendar.YEAR);
         }
     }
+
+	public static boolean isDouble(String s) {
+		try {
+			Double.parseDouble(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public static boolean isInt(String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	
     
 }

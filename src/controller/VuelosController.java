@@ -143,6 +143,9 @@ public class VuelosController {
         List <Vuelos> vuelosMatched = new ArrayList<Vuelos>();
         switch (criteria) {
             case "IDVUELO":
+                if(!ValidacionArchivos.isInt(searchValue)) {
+                    throw new IllegalArgumentException("El valor ingresado no es un numero");
+                }
                 for (Vuelos v : vuelos) {
                     if (v.getIdVuelo() == Integer.parseInt(searchValue)) {
                         vuelosMatched.add(v);
@@ -154,7 +157,7 @@ public class VuelosController {
                 break;
             case "TIPOVUELO":
                 for (Vuelos v : vuelos) {
-                    if (v.getTipoVuelo() == searchValue.charAt(0)) {
+                    if (String.valueOf(v.getTipoVuelo()).equalsIgnoreCase(String.valueOf(searchValue.charAt(0)))) {
                         vuelosMatched.add(v);
                     }
                 }
@@ -184,15 +187,18 @@ public class VuelosController {
                 break;
             case "ESTADO":
                 for (Vuelos v : vuelos) {
-                    if (v.getEstado() == searchValue.charAt(0)) {
+                    if (String.valueOf(v.getEstado()).equalsIgnoreCase(String.valueOf(searchValue.charAt(0)))) {
                         vuelosMatched.add(v);
                     }
                 }
                 if(vuelosMatched.size() == 0) {
-                    throw new VueloNotFoundExcep("No se encontraron vuelos con ese estado");
+                    throw new VueloNotFoundExcep("No se encontraron vuelos con ese estado, recuerde ingresar P para Programado, R para Retrasado y C para Cancelado");
                 }
                 break;
             case "DURACION":
+                if(!ValidacionArchivos.isDouble(searchValue)) {
+                    throw new IllegalArgumentException("El valor ingresado no es un numero");
+                }
                 for (Vuelos v : vuelos) {
                     if (v.getDuracion() == Double.parseDouble(searchValue)) {
                         vuelosMatched.add(v);
@@ -204,7 +210,7 @@ public class VuelosController {
                 break;
             case "AVION":
                 for (Vuelos v : vuelos) {
-                    if (v.getAvion().getModelo().equals(searchValue)) {
+                    if (v.getAvion().getModelo().equalsIgnoreCase(searchValue)) {
                         vuelosMatched.add(v);
                     }
                 }
@@ -213,6 +219,9 @@ public class VuelosController {
                 }        
                 break;
             case "TRIPULANTE":
+                if(!ValidacionArchivos.isInt(searchValue)) {
+                    throw new IllegalArgumentException("El valor ingresado no es un numero");
+                }
                 for (Vuelos v : vuelos) {
                     for (Tripulantes t : v.getTripulacion()) {
                         if (t.getDniTripulante() == Integer.parseInt(searchValue)) {
@@ -308,7 +317,7 @@ public class VuelosController {
             case "ZONA HORARIA":
                 for (Vuelos v : vuelos) {
                     if(v instanceof Internacionales) {
-                        if (((Internacionales) v).getZonaHorariaDestino().equals(searchValue)) {
+                        if (((Internacionales) v).getZonaHorariaDestino().equalsIgnoreCase(searchValue)) {
                             vuelosMatched.add(v);
                         }
                     }

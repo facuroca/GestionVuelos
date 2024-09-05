@@ -358,17 +358,21 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        String criteria = cbCriteria.getSelectedItem() != null ? cbCriteria.getSelectedItem().toString() : null;
+        String criteria = cbCriteria.getSelectedItem() != null ? (String) cbCriteria.getSelectedItem() : null;
         String searchValue = searchField.getText();
         String selectedId = cbResultIds.getSelectedItem() != null ? (String) cbResultIds.getSelectedItem(): "0";
         Vuelos selectedVuelo = null;
 
         if (source == searchButton) {
             setComponentsInvisible();
+            cbResultIds.removeAllItems();
             editButton.setVisible(true);
             try {
+                if(criteria == null) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un criterio de busqueda", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 this.vuelosMatched = vuelosController.searchByCriteria(criteria, searchValue);
-                cbResultIds.removeAllItems();
                 for(Vuelos v : vuelosMatched) {
                     if(v != null) {
                         cbResultIds.addItem(String.valueOf(v.getIdVuelo()));
@@ -384,7 +388,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         } else if (source == showInfo) {
             setComponentsNonEditable();
             int selectedIdInt = 0;
-            if(selectedId != null) {
+            if(selectedId != null && selectedId != "0") {
                 selectedIdInt = Integer.parseInt(selectedId);
                 selectedVuelo = vuelosController.getVueloById(selectedIdInt);
             } else {
@@ -604,7 +608,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
 
 
         } else if (source == editButton) {
-            if(txtIdVuelo.getText().isBlank()) {
+            if(txtIdVuelo.getText().isBlank() || selectedId == "0" || selectedId == null) {
                 JOptionPane.showMessageDialog(null, "Seleccione un vuelo", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -889,12 +893,10 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         txtAerolinea.setEditable(true);
 
         cbEstado.setEnabled(true);
-        cbEstado.setEditable(true);
 
         txtDuracion.setEditable(true);
 
         cbAvion.setEnabled(true);
-        cbAvion.setEditable(true);
 
         lstTripulacion.setEnabled(true);
         spTripulacion.setEnabled(true);
@@ -904,21 +906,16 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         chkPermiteMascotas.setEnabled(true);
 
         cbPaisOrigen.setEnabled(true);
-        cbPaisOrigen.setEditable(true);
 
         cbPaisDestino.setEnabled(true);
-        cbPaisDestino.setEditable(true);
 
         chkRequiereVisa.setEnabled(true);
 
         cbZonaHorariaDestino.setEnabled(true);
-        cbZonaHorariaDestino.setEditable(true);
 
         cbCiudadOrigen.setEnabled(true);
-        cbCiudadOrigen.setEditable(true);
 
         cbCiudadDestino.setEnabled(true);
-        cbCiudadDestino.setEditable(true);
 
         lstEscalas.setEnabled(true);
 

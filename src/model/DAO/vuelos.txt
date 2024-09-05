@@ -1,5 +1,4 @@
 1;I;Fly bondi;29/08/2024;P;13.5;Boeing 777;30456789,31234567,28765432,27890123,29876543;true;true;Inglaterra-Argentina-3,Argentina-Japon-2,Japon-Brasil-0;Inglaterra;Brasil;false;GMT-5
-2;N;Latam;29/08/2024;P;5.0;Airbus A320;30456789,31234567,28765432,25678901,34567890;true;false;Buenos Aires-Santa Fe-3,Santa Fe-Cordoba-0;Buenos Aires;Cordoba
 3;N;Latam;29/08/2024;P;2.0;Airbus A320;33123456,26789012,25678901,34567890,35678901;false;false;Buenos Aires;Rosario
 15;I;Qatar Airways;29/08/2024;P;12.0;Boeing 737;36789012,37890123,38901234,39012345,40123456;true;true;Argentina-Mexico-3,Mexico-Japon-0;Argentina;Japon;true;GMT+9
 44384420;I;American;29/08/2024;R;5.0;Airbus A340;27890123,29876543,32345678,33123456,26789012;true;true;Argentina-Inglaterra-1,Inglaterra-Espana-1,Espana-Japon-1;Argentina;Japon;true;GMT+9
