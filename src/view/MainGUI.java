@@ -78,6 +78,7 @@ public class MainGUI implements ActionListener {
 
         ingresoItem.addActionListener(this);
         consultaItem.addActionListener(this);
+        consultaMasivaItem.addActionListener(this);
         estadisticasItem1.addActionListener(this);
         estadisticasItem2.addActionListener(this);
         estadisticasItem3.addActionListener(this);
@@ -99,11 +100,13 @@ public class MainGUI implements ActionListener {
             System.exit(0);
         } 
     } else if (source == acercaDeItem) {
-        JOptionPane.showMessageDialog(null, "Sistema de gestión de vuelos\nVersion: 4.0\nAño: 2024\nAutor: Facundo Roca", "Acerca de...", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Sistema de gestión de vuelos\nVersion: 4.2\nAño: 2024\nAutor: Facundo Roca", "Acerca de...", JOptionPane.INFORMATION_MESSAGE);
     } else if (source == ingresoItem) {
         new IngresoGUI(avionesController, locacionesController, tripulantesController, vuelosController);
     } else if (source == consultaItem) {
         new ConsultaActualizacionGUI(vuelosController, avionesController, tripulantesController, locacionesController);
+    } else if (source == consultaMasivaItem) {
+        new ConsultaMasivaGUI(vuelosController);
     } else if (source == estadisticasItem1) {
         new Estadisticas1GUI(vuelosController);
     } else if (source == estadisticasItem2) {
