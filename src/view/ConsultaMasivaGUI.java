@@ -6,7 +6,7 @@ package view;
 // Mostrar dichos registros ordenados en forma ascendente, según algún criterio que considere oportuno. La pantalla deberá incluir la cantidad total
 // de registros visualizados y la cantidad total de registros existentes.
 
-import java.awt.FlowLayout;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -48,7 +48,7 @@ public class ConsultaMasivaGUI implements ActionListener {
     
     public ConsultaMasivaGUI(VuelosController vuelosController) {
         this.vuelosController = vuelosController;
-        ventana.setSize(800, 600);
+        ventana.setSize(WIDTH, HEIGHT);
         ventana.setLayout(layout);
 
 
