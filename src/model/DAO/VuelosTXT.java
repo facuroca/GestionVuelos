@@ -187,7 +187,8 @@ public class VuelosTXT {
             out = new PrintWriter(fw);
             String tripulacion = last.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
             String escalas = last.getEscalas().stream()
-            .filter(e -> e.getOrigen() != "null" && e.getDestino() != "null")
+            .filter(e -> e.getOrigen() != null && !e.getOrigen().equals("null") && 
+                             e.getDestino() != null && !e.getDestino().equals("null"))
             .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
             .collect(Collectors.joining(","));
             out.println();
@@ -226,7 +227,8 @@ public class VuelosTXT {
                 Vuelos v = vuelos.get(i);
                 String tripulacion = v.getTripulacion().stream().map(t -> String.valueOf(t.getDniTripulante())).collect(Collectors.joining(","));
                 String escalas = v.getEscalas().stream()
-                .filter(e -> e.getOrigen() != "null" && e.getDestino() != "null")
+                .filter(e -> e.getOrigen() != null && !e.getOrigen().equals("null") && 
+                             e.getDestino() != null && !e.getDestino().equals("null"))
                 .map(e -> e.getOrigen() + "-" + e.getDestino() + "-" + e.getEspera())
                 .collect(Collectors.joining(","));
 

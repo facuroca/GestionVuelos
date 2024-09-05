@@ -336,7 +336,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbCiudadDestino.addActionListener(this);
 
         showInfo.addActionListener(this);
-        cbResultIds.addActionListener(this);
+        //cbResultIds.addActionListener(this);
 
         lstTripulacion.addListSelectionListener(this);
 
@@ -381,7 +381,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 return;
             }
 
-        } else if (source == cbResultIds) {
+        } else if (source == showInfo) {
             setComponentsNonEditable();
             int selectedIdInt = 0;
             if(selectedId != null) {
@@ -529,50 +529,61 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
                 panelEscalas.repaint();
                 //TODO FIX THIS
                 
-                int[] indicesEscalas = new int[selectedVuelo.getEscalas().size()-1];
+                // int[] indicesEscalas = new int[selectedVuelo.getEscalas().size()-1];
+                // int contEscalas = 0;
+                // String[] escalasNames = new String[selectedVuelo.getEscalas().size()-1];
+                int numEscalas = selectedVuelo.getEscalas().size();
+                System.out.println(numEscalas);
+                int[] indicesEscalas = new int[numEscalas];
                 int contEscalas = 0;
-                String[] escalasNames = new String[selectedVuelo.getEscalas().size()-1];
-                if (selectedVuelo instanceof Internacionales && selectedVuelo.getEscalas().size() == 2) {
+                String[] escalasNames = new String[numEscalas];
+                if (selectedVuelo instanceof Internacionales && numEscalas == 2) {
                     for(Escalas esc : selectedVuelo.getEscalas()) {
-                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
+                        if(esc.getDestino() != null && esc.getOrigen() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
                             txtEscala1.setText(String.valueOf(esc.getEspera()));
                         }
                     }
-                } else if (selectedVuelo instanceof Internacionales && selectedVuelo.getEscalas().size() == 3) {
+                } else if (selectedVuelo instanceof Internacionales && numEscalas == 3) {
                     for(Escalas esc : selectedVuelo.getEscalas()) {
-                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
+                        if(esc.getDestino() != null && esc.getOrigen() != null && esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
                             txtEscala1.setText(String.valueOf(esc.getEspera()));
-                        } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())) {
+                        } else if (esc.getOrigen() != null && esc.getDestino() != null && esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getOrigen();
                             contEscalas++;
-                        } else if (!esc.getOrigen().equals((String)cbPaisOrigen.getSelectedItem()) && !esc.getDestino().equals((String) cbPaisDestino.getSelectedItem())
-                        && !esc.getOrigen().equals((String)cbPaisDestino.getSelectedItem()) && !esc.getDestino().equals((String) cbPaisOrigen.getSelectedItem())) {
+                        } else if (esc.getOrigen() != null && esc.getDestino() != null &&
+                        !esc.getOrigen().equals((String) cbPaisOrigen.getSelectedItem()) &&
+                        !esc.getDestino().equals((String) cbPaisDestino.getSelectedItem()) &&
+                        !esc.getOrigen().equals((String) cbPaisDestino.getSelectedItem()) &&
+                        !esc.getDestino().equals((String) cbPaisOrigen.getSelectedItem())) {
                             txtEscala2.setText(String.valueOf(esc.getEspera()));
                         }
                     }
-                } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 2) {
+                } else if (selectedVuelo instanceof Nacionales && numEscalas == 2) {
                     for(Escalas esc : selectedVuelo.getEscalas()) {
-                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
+                        if(esc.getDestino() != null && esc.getOrigen() != null && esc.getOrigen().equals((String) cbCiudadOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
                             txtEscala1.setText(String.valueOf(esc.getEspera()));
                         }
                     }
-                } else if (selectedVuelo instanceof Nacionales && selectedVuelo.getEscalas().size() == 3) {
+                } else if (selectedVuelo instanceof Nacionales && numEscalas == 3) {
                     for(Escalas esc : selectedVuelo.getEscalas()) {
-                        if(esc.getDestino() != null && esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem())) {
+                        if(esc.getDestino() != null && esc.getOrigen() != null && esc.getOrigen().equals((String) cbCiudadOrigen.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getDestino();
                             contEscalas++;
                             txtEscala1.setText(String.valueOf(esc.getEspera()));
-                        } else if (esc.getOrigen() != null && esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())) {
+                        } else if (esc.getOrigen() != null && esc.getDestino() != null && esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())) {
                             escalasNames[contEscalas] = esc.getOrigen();
                             contEscalas++;
-                        } else if (!esc.getOrigen().equals((String)cbCiudadOrigen.getSelectedItem()) && !esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem())
-                        && !esc.getOrigen().equals((String)cbCiudadDestino.getSelectedItem()) && !esc.getDestino().equals((String) cbCiudadOrigen.getSelectedItem())) {
+                        } else if (esc.getOrigen() != null && esc.getDestino() != null &&
+                        !esc.getOrigen().equals((String) cbCiudadOrigen.getSelectedItem()) &&
+                        !esc.getDestino().equals((String) cbCiudadDestino.getSelectedItem()) &&
+                        !esc.getOrigen().equals((String) cbCiudadDestino.getSelectedItem()) &&
+                        !esc.getDestino().equals((String) cbCiudadOrigen.getSelectedItem())) {
                             txtEscala2.setText(String.valueOf(esc.getEspera()));
                         }
                     }

@@ -398,23 +398,23 @@ public class VuelosController {
                         v.setTieneEscalas(tieneEscalas);
                         v.setPermiteMascotas(permiteMascotas);
                         if(v instanceof Nacionales) {
-                            if(tieneEscalas && escalas.length == 1) {
-                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
-                                v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
-                                v.setEscala(1, escalasStrings.get(0), ciudadDestino, 0);
-                                v.setEscala(2, "null", "null", 0);
-                            } else if (tieneEscalas && escalas.length == 2) {
-                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
-                                v.setEscala(0, ciudadOrigen, escalasStrings.get(0), escala1Int);
-                                v.setEscala(1, escalasStrings.get(0), escalasStrings.get(1), escala2Int);
-                                v.setEscala(2, escalasStrings.get(1), ciudadDestino, 0);
-                            }
                             for(Locaciones l : locacionesController.getLocaciones()) {
                                 if (l.getNombrePais().equals("Argentina") && l.getNombreCiudad().equals(ciudadOrigen)) {
                                     lAuxOrigen = l;
                                 } else if (l.getNombrePais().equals("Argentina") && l.getNombreCiudad().equals(ciudadDestino)) {
                                     lAuxDestino = l;
                                 }
+                            }
+                            if(tieneEscalas && escalas.length == 1) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, lAuxOrigen.getNombreCiudad(), escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), lAuxDestino.getNombreCiudad(), 0);
+                                v.setEscala(2, "null", "null", 0);
+                            } else if (tieneEscalas && escalas.length == 2) {
+                                List<String> escalasStrings = Arrays.stream(escalas).filter(e -> e instanceof String).map(e -> (String) e).collect(Collectors.toList());
+                                v.setEscala(0, lAuxOrigen.getNombreCiudad(), escalasStrings.get(0), escala1Int);
+                                v.setEscala(1, escalasStrings.get(0), escalasStrings.get(1), escala2Int);
+                                v.setEscala(2, escalasStrings.get(1), lAuxDestino.getNombreCiudad(), 0);
                             }
                             ((Nacionales) v).setCiudadOrigen(lAuxOrigen);
                             ((Nacionales) v).setCiudadDestino(lAuxDestino);                         
