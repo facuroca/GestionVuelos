@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConsultaMasivaGUI implements ActionListener {
-    private static final int WIDTH = 800;
+    private static final int WIDTH = 950;
     private static final int HEIGHT = 600;
     private static final int TEXTFIELD_WIDTH = 12;
 
@@ -42,7 +42,7 @@ public class ConsultaMasivaGUI implements ActionListener {
     private DefaultTableModel tableModel;
     private JTable tblRecordsTable;
 
-    private List<String[]> allRecords; // This should be replaced with your actual data source
+    private List<String[]> allRecords;
 
     private VuelosController vuelosController;
     
@@ -51,13 +51,10 @@ public class ConsultaMasivaGUI implements ActionListener {
         ventana.setSize(WIDTH, HEIGHT);
         ventana.setLayout(layout);
 
-
-        // Initialize table
         String[] columnNames = {"ID Vuelo", "Tipo de Vuelo", "Aerolinea", "Estado", "Duracion", "Avion", "Tiene escalas?", "Origen", "Destino"};
         tableModel = new DefaultTableModel(columnNames, 0);
         tblRecordsTable = new JTable(tableModel);
 
-        // Layout setup
         filterPanel.add(lblFilter1);
         filterPanel.add(filterField1);
         filterPanel.add(lblFilter2);
@@ -72,13 +69,10 @@ public class ConsultaMasivaGUI implements ActionListener {
         ventana.add(spRecordsTable, BorderLayout.CENTER);
         ventana.add(infoPanel, BorderLayout.SOUTH);
 
-        // Load all records (this should be replaced with your actual data loading logic)
         loadAllRecords();
 
-        // Add action listener to the search button
         searchButton.addActionListener(this);
 
-        // Display all records initially
         displayRecords(allRecords);
 
         ventana.setVisible(true);
@@ -88,15 +82,13 @@ public class ConsultaMasivaGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
+        if (source == searchButton) {
+            filterRecords();
+        }
     }
 
     private void loadAllRecords() {
-        // This method should load all records from your data source
-        allRecords = new ArrayList<>();
-        // Example data
-        allRecords.add(new String[]{"A1", "B1", "C1", "D1", "E1", "F1"});
-        allRecords.add(new String[]{"A2", "B2", "C2", "D2", "E2", "F2"});
-        // Add more records as needed
+        allRecords = vuelosController.getVuelosString();
         totalRecordsLabel.setText("Total de registros: " + allRecords.size());
     }
 
@@ -104,23 +96,28 @@ public class ConsultaMasivaGUI implements ActionListener {
         String filter1 = filterField1.getText().toLowerCase();
         String filter2 = filterField2.getText().toLowerCase();
 
+        allRecords = vuelosController.getVuelosString();
         List<String[]> filteredRecords = new ArrayList<>();
+
         for (String[] record : allRecords) {
-            boolean matchesFilter1 = filter1.isEmpty() || record[0].toLowerCase().contains(filter1);
-            boolean matchesFilter2 = filter2.isEmpty() || record[1].toLowerCase().contains(filter2);
+            boolean matchesFilter1 = filter1.isEmpty() || record[0].toLowerCase().contains(filter1) || record[1].toLowerCase().contains(filter1) ||
+             record[2].toLowerCase().contains(filter1) || record[3].toLowerCase().contains(filter1) || record[4].toLowerCase().contains(filter1) ||
+              record[5].toLowerCase().contains(filter1) || record[6].toLowerCase().equals(filter1) || record[7].toLowerCase().contains(filter1) ||
+               record[8].toLowerCase().contains(filter1);
+
+            boolean matchesFilter2 = filter2.isEmpty() || record[1].toLowerCase().contains(filter2) || record[2].toLowerCase().contains(filter2) ||
+             record[3].toLowerCase().contains(filter2) || record[4].toLowerCase().contains(filter2) || record[5].toLowerCase().contains(filter2) ||
+              record[6].toLowerCase().equals(filter2) || record[7].toLowerCase().contains(filter2) || record[8].toLowerCase().contains(filter2);
+
             if (matchesFilter1 && matchesFilter2) {
                 filteredRecords.add(record);
             }
         }
-
-        // Sort records (example: sort by the first column)
-        filteredRecords.sort((r1, r2) -> r1[0].compareTo(r2[0]));
-
         displayRecords(filteredRecords);
     }
 
     private void displayRecords(List<String[]> records) {
-        tableModel.setRowCount(0); // Clear existing rows
+        tableModel.setRowCount(0);
         for (String[] record : records) {
             tableModel.addRow(record);
         }

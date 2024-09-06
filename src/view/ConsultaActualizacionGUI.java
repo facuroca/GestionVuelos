@@ -827,7 +827,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         
     }
 
-    public void setComponentsInvisible() {
+    private void setComponentsInvisible() {
         lblIdVuelo.setVisible(false);
         txtIdVuelo.setVisible(false);
 
@@ -888,7 +888,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cancelButton.setVisible(false);
     }
 
-    public void setComponentsEditable() {
+    private void setComponentsEditable() {
 
         txtAerolinea.setEditable(true);
 
@@ -928,7 +928,7 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cancelButton.setVisible(true);
     }
 
-    public void setComponentsNonEditable() {
+    private void setComponentsNonEditable() {
         txtAerolinea.setEditable(false);
 
         cbEstado.setEnabled(false);
