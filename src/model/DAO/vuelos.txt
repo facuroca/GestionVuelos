@@ -21,3 +21,6 @@
 4364623;I;Latam;4/09/2024;P;32.0;Airbus A320;30456789,31234567,28765432,27890123,29876543;true;true;Mexico-Inglaterra-4,Inglaterra-Chile-0;Mexico;Chile;true;GMT+12
 653;I;Aerolineas Argentinas;4/09/2024;P;23.0;Airbus A340;31234567,29876543,38901234,44567890,56789012;true;true;Mexico-Peru-2,Peru-Argentina-0;Mexico;Argentina;false;GMT-3
 2313;N;Latam;5/09/2024;R;6.0;Boeing 737;28765432,27890123,32345678,26789012,25678901;true;true;Buenos Aires-Rosario-2,Rosario-Santa Fe-1,Santa Fe-Cordoba-0;Buenos Aires;Cordoba
+42;N;Latam;6/09/2024;P;7.0;Boeing 747;28765432,27890123,32345678,33123456,26789012;true;false;Buenos Aires-Santa Fe-2,Santa Fe-Jujuy-1,Jujuy-Rio Negro-0;Buenos Aires;Rio Negro
+99;I;Qatar Airways;6/09/2024;P;19.0;Boeing 777;28765432,27890123,32345678,33123456,26789012;false;true;Argentina;Estados Unidos;true;GMT+6
+734734;I;Habta;6/09/2024;C;2.0;Airbus A340;28765432,27890123,29876543,33123456,26789012;false;true;Chile;Peru;false;GMT+8

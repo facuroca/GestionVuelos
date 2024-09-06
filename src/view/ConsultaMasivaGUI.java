@@ -96,7 +96,8 @@ public class ConsultaMasivaGUI implements ActionListener {
         String filter1 = filterField1.getText().toLowerCase();
         String filter2 = filterField2.getText().toLowerCase();
 
-        allRecords = vuelosController.getVuelosString();
+        loadAllRecords();
+
         List<String[]> filteredRecords = new ArrayList<>();
 
         for (String[] record : allRecords) {
