@@ -43,8 +43,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
     private FlowLayout layout = new FlowLayout();
     private JFrame ventana = new JFrame(TITLE);
 
-    // 44384420;I;American;29/08/2024;R;5.0;Airbus A340;27890123,29876543,32345678,33123456,26789012;true;true;
-    // Argentina-Inglaterra-1.0,Inglaterra-Espana-4.0,Espana-Japon-0.0;Argentina;Japon;true;GMT+9
     private String[] criterias = {"IDVUELO", "TIPOVUELO", "AEROLINEA", "FECHADECARGA", "ESTADO", "DURACION", "AVION", "TRIPULANTE", "TIENE ESCALAS?", "PERMITE MASCOTAS?",
      "ESCALA", "ORIGEN", "DESTINO", "REQUIERE VISA?", "ZONA HORARIA"};
     private JLabel lblCriteria = new JLabel("Seleccione el criterio de busqueda de vuelos");
@@ -255,7 +253,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbPaisDestino.setEditable(false);
         cbPaisDestino.setEnabled(false);
         ventana.add(lblPaisDestino);
-        //cargar combo
         
 
         ventana.add(cbPaisDestino);
@@ -336,7 +333,6 @@ public class ConsultaActualizacionGUI implements ActionListener, ListSelectionLi
         cbCiudadDestino.addActionListener(this);
 
         showInfo.addActionListener(this);
-        //cbResultIds.addActionListener(this);
 
         lstTripulacion.addListSelectionListener(this);
 

@@ -51,7 +51,7 @@ public class ConsultaMasivaGUI implements ActionListener {
         ventana.setSize(WIDTH, HEIGHT);
         ventana.setLayout(layout);
 
-        String[] columnNames = {"ID Vuelo", "Tipo de Vuelo", "Aerolinea", "Estado", "Duracion", "Avion", "Tiene escalas?", "Origen", "Destino"};
+        String[] columnNames = {"ID Vuelo", "Tipo de Vuelo", "Aerolinea", "Estado", "Duracion", "Avion", "Tiene escalas?", "Permite mascotas?", "Origen", "Destino"};
         tableModel = new DefaultTableModel(columnNames, 0);
         tblRecordsTable = new JTable(tableModel);
 
@@ -103,12 +103,13 @@ public class ConsultaMasivaGUI implements ActionListener {
         for (String[] record : allRecords) {
             boolean matchesFilter1 = filter1.isEmpty() || record[0].toLowerCase().contains(filter1) || record[1].toLowerCase().contains(filter1) ||
              record[2].toLowerCase().contains(filter1) || record[3].toLowerCase().contains(filter1) || record[4].toLowerCase().contains(filter1) ||
-              record[5].toLowerCase().contains(filter1) || record[6].toLowerCase().equals(filter1) || record[7].toLowerCase().contains(filter1) ||
-               record[8].toLowerCase().contains(filter1);
+              record[5].toLowerCase().contains(filter1) || record[6].toLowerCase().equals(filter1) || record[7].toLowerCase().equals(filter1) ||
+               record[8].toLowerCase().contains(filter1) || record[9].toLowerCase().contains(filter1);
 
             boolean matchesFilter2 = filter2.isEmpty() || record[1].toLowerCase().contains(filter2) || record[2].toLowerCase().contains(filter2) ||
              record[3].toLowerCase().contains(filter2) || record[4].toLowerCase().contains(filter2) || record[5].toLowerCase().contains(filter2) ||
-              record[6].toLowerCase().equals(filter2) || record[7].toLowerCase().contains(filter2) || record[8].toLowerCase().contains(filter2);
+              record[6].toLowerCase().equals(filter2) || record[7].toLowerCase().equals(filter2) || record[8].toLowerCase().contains(filter2) ||
+               record[9].toLowerCase().contains(filter2);
 
             if (matchesFilter1 && matchesFilter2) {
                 filteredRecords.add(record);

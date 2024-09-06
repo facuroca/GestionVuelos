@@ -107,10 +107,6 @@ public class VuelosTXT {
                         v.setEscala(indexEscalas, escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
                         indexEscalas++;
                     }
-                    // final List<Escalas> escalasVuelo = escalas.stream().map(e -> {
-                    //     String[] escala = e.split("-");
-                    //     return new Escalas(escala[0], escala[1], ValidacionArchivos.aInt(escala[2]));
-                    // }).collect(Collectors.toList());
                     if (v instanceof Internacionales) {
                         final String paisOrigen = parsed[11].trim();
                         final String paisDestino = parsed[12].trim();
@@ -253,7 +249,6 @@ public class VuelosTXT {
                 }
             }
         } catch (Exception e) {
-            System.out.println("entre por txt");
             e.printStackTrace();
         } finally {
             out.close();

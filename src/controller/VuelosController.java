@@ -466,7 +466,6 @@ public class VuelosController {
         VuelosTXT.escribirVuelosActualizados(vuelos);
     }
 
-    // String[] columnNames = {"ID Vuelo", "Tipo de Vuelo", "Aerolinea", "Estado", "Duracion", "Avion", "Tiene escalas?", "Origen", "Destino"};
     public List<String[]> getVuelosString() {
         List<String[]> vuelosString = new ArrayList<String[]>();
         List<Vuelos> vuelosSortedById = getVuelosSortedById();
@@ -474,6 +473,7 @@ public class VuelosController {
             String tipoVueloString = v instanceof Internacionales ? "Internacional" : "Nacional";
             String estadoString = v.getEstado() == 'P' ? "Programado" : v.getEstado() == 'R' ? "Retrasado" : "Cancelado";
             String tieneEscalasString = v.isTieneEscalas() ? "Si" : "No";
+            String permiteMascotaString = v.isPermiteMascotas() ? "Si" : "No";
             String origenString = "";
             String destinoString = "";
             if (v instanceof Internacionales) {
@@ -484,7 +484,7 @@ public class VuelosController {
                 destinoString = ((Nacionales) v).getCiudadDestino().getNombreCiudad();
             }
             vuelosString.add(new String[]{String.valueOf(v.getIdVuelo()) , tipoVueloString, v.getAerolinea(), estadoString, String.valueOf(v.getDuracion()),
-                 v.getAvion().getModelo(), tieneEscalasString, origenString, destinoString});
+                 v.getAvion().getModelo(), tieneEscalasString, permiteMascotaString, origenString, destinoString});
         }
         return vuelosString;
     }
