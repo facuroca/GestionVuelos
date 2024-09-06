@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConsultaMasivaGUI implements ActionListener {
-    private static final int WIDTH = 950;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 1050;
+    private static final int HEIGHT = 650;
     private static final int TEXTFIELD_WIDTH = 12;
 
 
